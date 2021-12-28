@@ -1,6 +1,7 @@
 import React from "react";
 
 export const Day = ({ data, lang }) => {
+ // <li key={d.date}>{lang==="eng" ? "date" : lang==="rus" ? "Дата" : "kuupäev" }{d.date}</li>
   return (
     <div>
       Day
@@ -14,8 +15,8 @@ export const Day = ({ data, lang }) => {
                   dt.day.place.map((p) => {
                     return (
                       <div key={p.name}>
-                        <p>Name:{p.name}</p>
-                        <p>Temperature:{dt.day.tempmax}</p>
+                        <p>{lang==="eng" ? "City" : lang==="rus" ? "город" : "linn"}:{p.name}</p>
+                        <p>{lang==="eng" ? "temperature" : lang==="rus" ? "температура" : "temperatuuri"}:{dt.day.tempmax}</p>
                         <p>{dt.day.text}</p>
                       </div>
                     );

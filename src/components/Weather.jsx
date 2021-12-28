@@ -18,7 +18,7 @@ export const Weather = () => {
 
   useEffect(() => {
     const getForecastData = async () => {
-      const res = await axios.get(`http://cd94-193-40-241-26.ngrok.io/`);
+      const res = await axios.get(`/api/forecasts?lang=${lang}`);
       //console.log(res)
       setData(res.data.forecast);
     };
