@@ -1,26 +1,36 @@
-import React from "react"
+import React from "react";
 
-export const Day = ({data}) => {
-    // const places=data.map((p)=>p.place)
-    
-    // console.log(places.map(p=>p.name))
-    return (
-        <div>
-            Day
-            <ul>
-            {data.map((d)=>{
-                {console.log(d.place.length)}
-                // for(let i=0; i<d.place.length;i++){
-                    
-                // }
-                return(
-                    // <li key={1}>{d.text}</li>
-                    <li key={2}>{d.place.map(p=>p.name)}</li>
-                    
-                )
-            })}
-            </ul>
-            
-        </div>
-    )
-}
+export const Day = ({ data, lang }) => {
+  return (
+    <div>
+      Day
+      <ul>
+        {data.map((dt) => {
+          return (
+            <div key={dt.date}>
+              <p>Date:{dt.date}</p>
+              <ul>
+                {dt.day.place ? (
+                  dt.day.place.map((p) => {
+                    return (
+                      <div key={p.name}>
+                        <p>Name:{p.name}</p>
+                        <p>Temperature:{dt.day.tempmax}</p>
+                        <p>{dt.day.text}</p>
+                      </div>
+                    );
+                  })
+                ) : (
+                  <div>
+                    <p>Temperature:{dt.day.tempmin}/{dt.day.tempmax}</p>
+                    <p>{dt.day.text}</p>
+                  </div>
+                )}
+              </ul>
+            </div>
+          );
+        })}
+      </ul>
+    </div>
+  );
+};
