@@ -7,53 +7,111 @@ export const Weather = () => {
   const [lang, setLang] = useState("eesti");
   const [showTomorrowData, setShowTomorrowData] = useState(true);
   const [filterData, setFilterData] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [data, setData] = useState();
   console.log(data, "data value");
-  let today = new Date();
-  //let tomorrow = new Date(today.getTime() + 24 * 60 * 60 * 1000)
-  let tomorrow = new Date(today.getTime())
-    .toISOString()
-    .split("T")[0];
-  console.log(tomorrow);
 
   useEffect(() => {
     const getForecastData = async () => {
-      const res = await axios.get(`/api/forecasts?lang=${lang}`);
-      //console.log(res)
-      setData(res.data.forecast);
+      setLoading(true);
+      try {
+        const res = await axios.get(`/api/forecasts?lang=${lang}`);
+
+        setData(res.data.forecast);
+      } catch (error) {
+        console.log(error);
+      }
+      setLoading(false);
     };
     getForecastData();
   }, [lang]);
 
   useEffect(() => {
-    const handleDataToShow = (data) => {
+    const handleDataToShow = ([tomorrow, ...rest]) => {
       let flData;
 
       if (showTomorrowData) {
-        flData = data.filter((d) => d.date === tomorrow);
+        flData = [tomorrow];
       } else {
-        flData = data.filter((d) => d.date !== tomorrow);
+        flData = [...rest];
       }
       setFilterData(flData);
-      //console.log(flData)
     };
 
     if (data) {
       handleDataToShow(data);
     }
   }, [showTomorrowData, data]);
+  if (loading) {
+    return (
+      <div
+        className="d-flex justify-content-center align-items-center"
+        style={{ height: "100vh" }}
+      >
+        <div className="spinner-border text-primary" role="status"></div>
+        <span>Loading...</span>
+      </div>
+    );
+  }
 
   return (
     <div>
-      <button onClick={() => setLang("eng")}>ENG</button>
-      <button onClick={() => setLang("eesti")}>Eesti</button>
-      <button onClick={() => setLang("rus")}>Rus</button>
-      <button onClick={() => setShowTomorrowData(true)}>Tomorrow</button>
-      <button onClick={() => setShowTomorrowData(false)}>NextDays</button>
+      <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+          <div>
+            <button
+              type="button"
+              className="btn btn-outline-success m-2"
+              onClick={() => setShowTomorrowData(true)}
+            >
+              Tomorrow
+            </button>
+
+            <button
+              type="button"
+              className="btn btn-outline-success"
+              onClick={() => setShowTomorrowData(false)}
+            >
+              NextDays
+            </button>
+          </div>
+
+          <div
+            className="d-flex  align-items-center"
+            style={{ cursor: "pointer" }}
+          >
+            <img
+              alt="estonia"
+              src={require("../assets/estonia.png")}
+              onClick={() => setLang("eesti")}
+              width="30px"
+              height="20px"
+              className="mr-2"
+            />
+            <img
+              alt="estonia"
+              src={require("../assets/united-kingdom.png")}
+              onClick={() => setLang("eng")}
+              width="30px"
+              height="20px"
+              className="m-2"
+            />
+
+            <img
+              alt="estonia"
+              src={require("../assets/russian.png")}
+              onClick={() => setLang("rus")}
+              width="30px"
+              height="20px"
+            />
+          </div>
+        </div>
+      </nav>
+
       {showTomorrowData ? (
         <Tomorrow data={filterData} lang={lang} />
       ) : (
-        <NextDays data={filterData} />
+        <NextDays data={filterData} lang={lang} />
       )}
     </div>
   );
