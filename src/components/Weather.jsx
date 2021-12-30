@@ -9,7 +9,6 @@ export const Weather = () => {
   const [filterData, setFilterData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState();
-  console.log(data, "data value");
 
   useEffect(() => {
     const getForecastData = async () => {
